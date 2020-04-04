@@ -12,11 +12,19 @@ public abstract class Result<V, E> {
     public abstract boolean isOk();
     public abstract boolean isErr();
 
+    public static<V, E> Ok<V, E> ok(V value) {
+        return new Ok<>(value);
+    }
+
+    public static<V, E> Err<V, E> err(E value) {
+        return new Err<>(value);
+    }
+
     /**
      * Converts from {@link Result} to {@link Optional}.
      * @return An optional of the value, discarding the error.
      */
-    public Optional<V> ok() {
+    public Optional<V> getOk() {
         return Optional.ofNullable(okVal);
     }
 
@@ -24,7 +32,7 @@ public abstract class Result<V, E> {
      * Converts from {@link Result} to {@link Optional}.
      * @return An optional of the value, discarding the ok value.
      */
-    public Optional<E> err() {
+    public Optional<E> getErr() {
         return Optional.ofNullable(errVal);
     }
 
@@ -42,9 +50,9 @@ public abstract class Result<V, E> {
     /**
      * Applies a function to the contained value if it is an {@link Ok},
      * otherwise return the fallback value.
-     * See {@link #map_or_get(Supplier, Function)} for the lazy version.
+     * See {@link #mapOrGet(Supplier, Function)} for the lazy version.
      */
-    public <W> W map_or(W fallback, Function<V, W> fn){
+    public <W> W mapOr(W fallback, Function<V, W> fn){
         if (isOk()) {
             return fn.apply(okVal);
         }
@@ -54,9 +62,9 @@ public abstract class Result<V, E> {
     /**
      * Applies a function to the contained value if it is an {@link Ok},
      * otherwise evaluates the fallback supplier.
-     * See {@link #map_or(Object, Function)} for the eager version.
+     * See {@link #mapOr(Object, Function)} for the eager version.
      */
-    public <W> W map_or_get(Supplier<W> fallback, Function<V, W> fn){
+    public <W> W mapOrGet(Supplier<W> fallback, Function<V, W> fn){
         if (isOk()) {
             return fn.apply(okVal);
         }
@@ -126,8 +134,8 @@ public abstract class Result<V, E> {
      * Otherwise returns the given fallback value.
      * @param fallback The fallback value
      */
-    public V unwrap_or(V fallback) {
-        return map_or(fallback, Function.identity());
+    public V unwrapOr(V fallback) {
+        return mapOr(fallback, Function.identity());
     }
 
     /**
@@ -135,8 +143,8 @@ public abstract class Result<V, E> {
      * Otherwise evaluates the given fallback supplier.
      * @param fallback The fallback supplier
      */
-    public V unwrap_or_get(Supplier<V> fallback) {
-        return map_or_get(fallback, Function.identity());
+    public V unwrapOrGet(Supplier<V> fallback) {
+        return mapOrGet(fallback, Function.identity());
     }
 
     /**
@@ -144,7 +152,7 @@ public abstract class Result<V, E> {
      * Otherwise, applies the given function to the error value.
      * @param fn Function that maps an {@link Err} value to {@link Ok}'s type.
      */
-    public V unwrap_or_else(Function<E, V> fn) {
+    public V unwrapOrElse(Function<E, V> fn) {
         if (isOk()) {
             return okVal;
         }
