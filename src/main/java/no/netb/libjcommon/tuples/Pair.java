@@ -1,4 +1,4 @@
-package no.netb.libjcommon;
+package no.netb.libjcommon.tuples;
 
 public class Pair<A, B> {
     private A a;
