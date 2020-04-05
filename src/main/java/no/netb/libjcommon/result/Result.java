@@ -6,11 +6,15 @@ import java.util.function.Supplier;
 
 public abstract class Result<V, E> {
 
-    V okVal = null;
-    E errVal = null;
+    protected V okVal = null;
+    protected E errVal = null;
 
-    public abstract boolean isOk();
-    public abstract boolean isErr();
+    public boolean isOk() {
+        return okVal != null;
+    }
+    public boolean isErr() {
+        return errVal != null;
+    }
 
     public static<V, E> Ok<V, E> ok(V value) {
         return new Ok<>(value);

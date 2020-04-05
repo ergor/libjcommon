@@ -9,14 +9,4 @@ public class Ok<V, E> extends Result<V, E> {
     public Ok(V value) {
         this.okVal = value;
     }
-
-    @Override
-    public boolean isOk() {
-        return true;
-    }
-
-    @Override
-    public boolean isErr() {
-        return false;
-    }
 }

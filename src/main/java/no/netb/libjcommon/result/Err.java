@@ -9,14 +9,4 @@ public class Err<V, E> extends Result<V, E> {
     public Err(E value) {
         this.errVal = value;
     }
-
-    @Override
-    public boolean isOk() {
-        return false;
-    }
-
-    @Override
-    public boolean isErr() {
-        return true;
-    }
 }
