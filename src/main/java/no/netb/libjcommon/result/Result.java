@@ -93,6 +93,10 @@ public abstract class Result<V, E> {
      */
     public V unwrap() {
         if (isErr()) {
+            if (errVal instanceof Exception) {
+                Exception e = (Exception) errVal;
+                throw new ResultException(e);
+            }
             throw new ResultException();
         }
         return okVal;
@@ -105,6 +109,10 @@ public abstract class Result<V, E> {
      */
     public V expect(String msg) {
         if (isErr()) {
+            if (errVal instanceof Exception) {
+                Exception e = (Exception) errVal;
+                throw new ResultException(msg, e);
+            }
             throw new ResultException(msg);
         }
         return okVal;
